@@ -1,5 +1,6 @@
 mod gemini;
 use std::env;
+use dotenv::dotenv;
 use poise::serenity_prelude as serenity;
 use crate::gemini::generate_gemini;
 
@@ -54,6 +55,7 @@ pub async fn gemini(
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
     let token = std::env::var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN");
     let intents = serenity::GatewayIntents::non_privileged();
 
