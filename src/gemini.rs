@@ -3,20 +3,21 @@ use reqwest;
 
 pub async fn generate_gemini(api_key: &str, prompt: &str) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
     let client = reqwest::Client::new();
-    let url = format!(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={}",
-        api_key
-    );
+    let url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
     let payload = json!({
         "contents": [{
             "parts": [{
                 "text": prompt
             }]
-        }]
+        }],
+        "generationConfig": {
+            "maxOutputTokens": 375
+        }
     });
     let response = client
-        .post(&url)
+        .post(url)
         .header("Content-Type", "application/json")
+        .header("x-goog-api-key", api_key)
         .json(&payload)
         .send()
         .await?
